@@ -1,6 +1,7 @@
 from simple_tree import SimpleTree
+from AVLTree import AVLTree
 
-tree = SimpleTree()
+tree = AVLTree()
 test_items = [30, 15, 8, 1, 5, 10, 20, 35, 21, 3, 40]
 
 for item in test_items:
