@@ -7,7 +7,7 @@ from tree_interface import TreeInterface
 from enum import IntEnum, auto, unique
 
 
-class ResBlackTree(TreeInterface):
+class RedBlackTree(TreeInterface):
 
     @unique
     class Color(IntEnum):
@@ -18,17 +18,17 @@ class ResBlackTree(TreeInterface):
         def __init__(self, value: int) -> None:
             super().__init__()
             self.value: int = value
-            self.left: ResBlackTree.Node = None
-            self.right: ResBlackTree.Node = None
-            self.parent: ResBlackTree.Node = None
-            self.color: ResBlackTree.Color = ResBlackTree.Color.BLACK
+            self.left: RedBlackTree.Node = None
+            self.right: RedBlackTree.Node = None
+            self.parent: RedBlackTree.Node = None
+            self.color: RedBlackTree.Color = RedBlackTree.Color.RED
 
         def __repr__(self) -> str:
             return str(self.value)
 
     def __init__(self) -> None:
         super().__init__()
-        self.root: ResBlackTree.Node = None
+        self.root: RedBlackTree.Node = None
 
     def __get_grandparent(self, node: Node) -> Node:
         if node is None or node.parent is None:
@@ -37,10 +37,44 @@ class ResBlackTree(TreeInterface):
             return node.parent.parent
 
     def __get_uncle(self, node: Node) -> Node:
-        gtandparent: ResBlackTree.Node = self.__get_grandparent(node)
+        gtandparent: RedBlackTree.Node = self.__get_grandparent(node)
         if not gtandparent:
             return None
         if node.parent == gtandparent.left:
             return gtandparent.right
         else:
             return gtandparent.left
+
+
+    def __rotate_left(node: Node):
+        pivot: RedBlackTree.Node = node.right
+        pivot.parent = node.parent
+        if node.parent:
+            if node.parent.left == node:
+                node.parent.left = pivot
+            else:
+                node.parent.right = pivot
+        
+        node.right = pivot.left
+        if pivot.left:
+            pivot.left.parent = node
+
+        node.parent = pivot
+        pivot.left = node
+
+    def __rotate_right(node: Node):
+        pivot: RedBlackTree.Node = node.left
+        pivot.parent = node.parent
+        if node.parent:
+            if node.parent.left == node:
+                node.parent.left = pivot
+            else:
+                node.parent.right = pivot
+        
+        node.left = pivot.right
+        if pivot.right:
+            pivot.right.parent = node
+
+        node.parent = pivot
+        pivot.right = node
+
