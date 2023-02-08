@@ -147,6 +147,15 @@ class RedBlackTree(TreeInterface):
     def remove(self, value: int):
         pass
 
-    def contains(self, value: int) -> bool:
-        pass
+    def __contains(self, node: Node, value: int) -> bool:
+        if not node:
+            return False
+        if value == node.value:
+            return True
+        if value < node.value:
+            return self.__contains(node.left, value)
+        else:
+            return self.__contains(node.right, value)
 
+    def contains(self, value: int) -> bool:
+        return self.__contains(self.root, value)
