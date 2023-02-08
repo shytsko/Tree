@@ -53,13 +53,14 @@ class RedBlackTree(TreeInterface):
                 node.parent.left = pivot
             else:
                 node.parent.right = pivot
-
         node.right = pivot.left
         if pivot.left:
             pivot.left.parent = node
 
         node.parent = pivot
         pivot.left = node
+        if not pivot.parent:
+            self.root = pivot
 
     def __rotate_right(self, node: Node):
         pivot: RedBlackTree.Node = node.left
@@ -76,6 +77,8 @@ class RedBlackTree(TreeInterface):
 
         node.parent = pivot
         pivot.right = node
+        if not pivot.parent:
+            self.root = pivot
 
     def insert(self, value):
         new_node = RedBlackTree.Node(value)
