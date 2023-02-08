@@ -1,7 +1,8 @@
 from simple_tree import SimpleTree
 from AVLTree import AVLTree
+from RedBlackTree import RedBlackTree
 
-tree = AVLTree()
+tree = RedBlackTree()
 test_items = [30, 15, 8, 1, 5, 10, 20, 35, 21, 3, 40]
 
 for item in test_items:

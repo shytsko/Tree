@@ -84,10 +84,10 @@ class RedBlackTree(TreeInterface):
             parent: RedBlackTree.Node = None
             while place:
                 parent = place
-            if place.value < value:
-                place = place.right
-            else:
-                place = place.left
+                if place.value < value:
+                    place = place.right
+                else:
+                    place = place.left
             new_node.parent = parent
             if parent.value < new_node.value:
                 parent.right = new_node
