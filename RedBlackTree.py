@@ -45,8 +45,7 @@ class RedBlackTree(TreeInterface):
         else:
             return gtandparent.left
 
-
-    def __rotate_left(node: Node):
+    def __rotate_left(self, node: Node):
         pivot: RedBlackTree.Node = node.right
         pivot.parent = node.parent
         if node.parent:
@@ -54,7 +53,7 @@ class RedBlackTree(TreeInterface):
                 node.parent.left = pivot
             else:
                 node.parent.right = pivot
-        
+
         node.right = pivot.left
         if pivot.left:
             pivot.left.parent = node
@@ -62,7 +61,7 @@ class RedBlackTree(TreeInterface):
         node.parent = pivot
         pivot.left = node
 
-    def __rotate_right(node: Node):
+    def __rotate_right(self, node: Node):
         pivot: RedBlackTree.Node = node.left
         pivot.parent = node.parent
         if node.parent:
@@ -70,11 +69,81 @@ class RedBlackTree(TreeInterface):
                 node.parent.left = pivot
             else:
                 node.parent.right = pivot
-        
+
         node.left = pivot.right
         if pivot.right:
             pivot.right.parent = node
 
         node.parent = pivot
         pivot.right = node
+
+    def insert(self, value):
+        new_node = RedBlackTree.Node(value)
+        if self.root:
+            place: RedBlackTree.Node = self.root
+            parent: RedBlackTree.Node = None
+            while place:
+                parent = place
+            if place.value < value:
+                place = place.right
+            else:
+                place = place.left
+            new_node.parent = parent
+            if parent.value < new_node.value:
+                parent.right = new_node
+            else:
+                parent.left = new_node
+        else:
+            self.root = new_node
+
+        self.__fix_insert1(new_node)
+
+    def __fix_insert1(self, node: Node):
+        if not node.parent:
+            node.color = RedBlackTree.Color.BLACK
+        else:
+            self.__fix_insert2(node)
+
+    def __fix_insert2(self, node: Node):
+        if node.parent.color == RedBlackTree.Color.BLACK:
+            return
+        else:
+            self.__fix_insert3(node)
+
+    def __fix_insert3(self, node: Node):
+        uncle: RedBlackTree.Node = self.__get_uncle(node)
+        grandparent: RedBlackTree.Node = self.__get_grandparent(node)
+
+        if uncle and uncle.color == RedBlackTree.Color.RED:
+            node.parent.color = RedBlackTree.Color.BLACK
+            uncle.color = RedBlackTree.Color.BLACK
+            grandparent.color = RedBlackTree.Color.RED
+            self.__fix_insert1(grandparent)
+        else:
+            self.__fix_insert4(node)
+
+    def __fix_insert4(self, node: Node):
+        grandparent: RedBlackTree.Node = self.__get_grandparent(node)
+        if node == node.parent.right and node.parent == grandparent.left:
+            self.__rotate_left(node.parent)
+            node = node.left
+        elif node == node.parent.left and node.parent == grandparent.right:
+            self.__rotate_right(node.parent)
+            node = node.right
+        self.__fix_insert5(node)
+
+    def __fix_insert5(self, node: Node):
+        grandparent: RedBlackTree.Node = self.__get_grandparent(node)
+        node.parent.color = RedBlackTree.Color.BLACK
+        grandparent.color = RedBlackTree.Color.RED
+        if node == node.parent.left and node.parent == grandparent.left:
+            self.__rotate_right(grandparent)
+        else:
+            self.__rotate_left(grandparent)
+
+    def remove(self, value: int):
+        pass
+
+    def contains(self, value: int) -> bool:
+        pass
 
